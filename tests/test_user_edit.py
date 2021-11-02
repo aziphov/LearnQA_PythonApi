@@ -1,11 +1,30 @@
 import time
 
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 class TestUserEdit(BaseCase):
 
+    @allure.title("This test has a custom title")
+    @allure.epic('Редактирование пользователя')
+    @allure.feature('Редактирование пользователя')
+    @allure.description_html("""
+        <h2>Данные для авторизации: </h2>
+        <p>редактирование пользователя</p>
+        <table style="width:100%">
+          <tr>
+            <th>email</th>
+            <th>password</th>
+          </tr>
+          <tr align="center">
+            <td>vinkotov@example.com</td>
+            <td>1234</td>
+          </tr>
+        </table>
+        """)
     def test_edit_just_created_user(self):
         #Register
         register_data = self.prepare_registration_data()
@@ -48,6 +67,10 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_json_value_by_name(response4, "firstName", new_name, "Wrong name of the user after edit")
 
+    @allure.epic('Редактирование пользователя')
+    @allure.feature('Редактирование пользователя')
+    @allure.story('Попытаемся изменить данные пользователя, будучи неавторизованными')
+    @allure.severity(allure.severity_level.NORMAL)
     def test_Ex17_1(self):
         #Register
         register_data = self.prepare_registration_data()
@@ -69,6 +92,12 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_code_status(response3, 400)
 
+
+    @allure.epic('Редактирование пользователя')
+    @allure.feature('Редактирование пользователя')
+    @allure.story('Попытаемся изменить данные пользователя, будучи авторизованными другим пользователем')
+    @allure.description('На занятиях мы написали только позитивный тест на PUT-метод редактирования пользователя.Давайте напишем несколько негативных:')
+    @allure.severity(allure.severity_level.TRIVIAL)
     def test_Ex17_2(self):
         # Register first user
         register_data = self.prepare_registration_data()
@@ -132,6 +161,10 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_json_value_by_name(response4, "firstName", first_name1, "Wrong name of the user after edit")
 
+    @allure.epic('Редактирование пользователя')
+    @allure.feature('Редактирование пользователя')
+    @allure.story('Попытаемся изменить email пользователя, будучи авторизованными тем же пользователем, на новый email без символа @ ')
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_Ex17_3(self):
         # Register
         register_data = self.prepare_registration_data()
@@ -174,6 +207,10 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_json_value_by_name(response4, "email", email, "Wrong email of the user after edit")
 
+    @allure.epic('Редактирование пользователя')
+    @allure.feature('Редактирование пользователя')
+    @allure.story('Попытаемся изменить firstName пользователя, будучи авторизованными тем же пользователем, на очень короткое значение в один символ')
+    @allure.severity(allure.severity_level.BLOCKER)
     def test_Ex17_4(self):
         #Register
         register_data = self.prepare_registration_data()
